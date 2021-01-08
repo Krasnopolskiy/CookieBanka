@@ -1,7 +1,5 @@
 FROM python:3.6-alpine
 
-RUN adduser -D cookie-banka
-
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
@@ -15,9 +13,6 @@ COPY server.py config.py boot.sh ./
 RUN chmod +x boot.sh
 
 ENV FLASK_APP server.py
-
-RUN chown -R cookie-banka:cookie-banka ./
-USER cookie-banka
 
 EXPOSE 5000
 ENTRYPOINT ["./boot.sh"]
