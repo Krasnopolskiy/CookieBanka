@@ -12,6 +12,13 @@ def index():
     return render_template('index.html', pagename='Index')
 
 
+@app.route('/users')
+@login_required
+def users():
+    users = models.User.query.all()
+    return render_template('users.html', pagename='Users', users=users)
+
+
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
