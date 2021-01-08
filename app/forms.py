@@ -25,8 +25,3 @@ class CookieForm(FlaskForm):
     name = StringField('Cookie name', validators=[DataRequired()])
     value = StringField('Cookie value', validators=[DataRequired()])
     submit = SubmitField('Submit')
-
-    def validate_name(self, name):
-        cookie = models.Cookie.query.filter_by(name=name.data).first()
-        if cookie is not None:
-            raise ValidationError('Please use a different cookie name.')
