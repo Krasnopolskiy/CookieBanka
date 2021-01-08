@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row gx-4" style="height: 100%">
+    <div class="col-4 fixed">
+        <div class="border rounded p-3 shadow-sm">
+            <h2>Создать куки</h2>
+            <form action="" method="post" class="form mt-3">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.name.label(class="form-label") }}
+                    {{ form.name(size=32, class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.value.label(class="form-label") }}
+                    {{ form.value(size=32, class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-8 scrollit">
+        <div class="container-fluid">
+            <div class="row row-cols-1 row-cols-md-3 gx-4 gy-1">
+                {% for cookie in cookies %}
+                <div class="col">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ cookie.name}} </h5>
+                            <a href="{{ url_for('cookie', cookie_id=cookie.id) }}" class="card-link">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

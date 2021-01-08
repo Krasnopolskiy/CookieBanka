@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-4 border rounded p-3">
+        <h1 class="display-6">Добро пожаловать!</h1>
+        <p class="lead"><strong>Cookie Bank'a</strong> - это лучший способ хранить ваши куки. Теперь никто не сможет
+            украсть их у Вас.</p>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('dashboard') }}">Начните прямо сейчас</a>
+        {% else %}
+        <a href="{{ url_for('login') }}">Начните прямо сейчас</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
